@@ -4,3 +4,6 @@ resources/
 resources/*
 gradle/
 gradle/*
+.idea/
+.idea/*
+.DS_Store
