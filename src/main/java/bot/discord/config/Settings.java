@@ -21,8 +21,11 @@ public class Settings {
     @XmlAttribute(name = "alt-prefix")
     private String altPrefix;
 
-    @XmlElement(name = "jdbc-database-url")
+    @XmlElement(name = "database-url")
     private String databaseUrl;
+
+    @XmlElement(name = "database-driver")
+    private String databaseDriver;
     //endregion
 
     //region Accessors
@@ -49,6 +52,11 @@ public class Settings {
     @NotNull
     public String getDatabaseUrl() {
         return databaseUrl;
+    }
+
+    @NotNull
+    public String getDatabaseDriver() {
+        return databaseDriver;
     }
     //endregion
 }

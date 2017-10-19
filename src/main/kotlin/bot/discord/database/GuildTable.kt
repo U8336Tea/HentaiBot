@@ -1,5 +1,6 @@
 package bot.discord.database
 
+import bot.discord.config.Configuration
 import bot.discord.database.tables.*
 import org.jetbrains.exposed.sql.*
 import net.dv8tion.jda.core.entities.Guild as DiscordGuild
@@ -9,7 +10,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object GuildTable {
 	init {
-		Database.connect("jdbc:h2:./resources/settings", "org.h2.Driver")
+		val settings = Configuration.settings
+
+		Database.connect(settings.databaseUrl, settings.databaseDriver)
 
 		transaction {
 			create(Guild, Tags, GuildToTag, GuildTagBlacklist)
