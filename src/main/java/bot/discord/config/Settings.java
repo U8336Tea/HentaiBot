@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.*;
 
-@XmlRootElement(name = "settings")
+@XmlRootElement(name = "bot")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Settings {
     //region XML Variables
@@ -21,10 +21,11 @@ public class Settings {
     @XmlAttribute(name = "alt-prefix")
     private String altPrefix;
 
-    @XmlElement(name = "postgres-url")
+    @XmlElement(name = "database-url")
     private String databaseUrl;
     //endregion
 
+    //region Accessors
     @NotNull
     public String getToken() {
         return token;
@@ -49,4 +50,5 @@ public class Settings {
     public String getDatabaseUrl() {
         return databaseUrl;
     }
+    //endregion
 }
