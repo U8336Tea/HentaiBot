@@ -21,7 +21,7 @@ public class Settings {
     @XmlAttribute(name = "alt-prefix")
     private String altPrefix;
 
-    @XmlElement(name = "database-url")
+    @XmlElement(name = "jdbc-database-url")
     private String databaseUrl;
     //endregion
 
