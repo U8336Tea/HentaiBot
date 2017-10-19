@@ -2,6 +2,7 @@ out/
 out/*
 resources/
 resources/*
+!resources/config.xml
 gradle/
 gradle/*
 .idea/
