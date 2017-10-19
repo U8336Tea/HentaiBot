@@ -1,6 +1,5 @@
 out/
-resources/*
-!resources/config.xml
+resources/
 gradle/
 .idea/
 .DS_Store
