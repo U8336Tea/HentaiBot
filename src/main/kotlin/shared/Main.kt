@@ -3,6 +3,7 @@ package shared
 import bot.discord.ImageSender
 import bot.discord.Listener
 import bot.discord.commands.*
+import bot.discord.config.Configuration
 import bot.discord.database.GuildTable
 import images.danbooru.DanbooruAPI
 import images.gelbooru.GelbooruAPI
@@ -14,25 +15,31 @@ import java.util.*
 
 //https://discordapp.com/api/oauth2/authorize?client_id=364067025850728449&scope=bot&permissions=0x4c00
 fun main(args: Array<String>) {
+	val settings = Configuration.settings
+
 	val apis = arrayListOf(DanbooruAPI, GelbooruAPI)
 
 	GuildTable.clearUnusedTags()
 
-	val client = CommandClientBuilder()
+	val clientBuilder = CommandClientBuilder()
 			.addCommands(AddTags, ListTags, RemoveTags, ResetTags)
 			.addCommands(BlacklistTags, ListBlacklistedTags, UnblacklistTags, ResetBlacklist)
 			.addCommands(GetPictureNumber, SetPictureNumber)
 			.addCommands(SendPicture)
 			.addCommands(ChangeChannel, SayChannel)
 			.addCommands(QuitBot)
-			.setOwnerId("187676588182077451")
-			.setPrefix("!!")
-			.setAlternativePrefix("..")
-			.build()
+			.setOwnerId(settings.ownerId)
+			.setPrefix(settings.prefix)
+
+	if (settings.altPrefix != null) {
+		clientBuilder.setAlternativePrefix(settings.altPrefix)
+	}
+
+	val client = clientBuilder.build()
 
 	val bot = JDABuilder(AccountType.BOT)
 			.setStatus(OnlineStatus.ONLINE)
-			.setToken ("MzY0MDY3MDI1ODUwNzI4NDQ5.DLKXWw.aIuD3iB9K2Oz5YrLmo8z82nKfJI")
+			.setToken(settings.token)
 			.addEventListener(client, Listener)
 			.buildAsync()
 
