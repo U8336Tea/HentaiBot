@@ -1,1 +1,1 @@
-main: java -cp out/artifacts/
+console: java -cp out/artifacts/main_jar/main.jar
