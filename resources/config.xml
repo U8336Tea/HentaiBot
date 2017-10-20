@@ -1,0 +1,6 @@
+<bot prefix="!!" alt-prefix="..">
+    <token>MzY0MDY3MDI1ODUwNzI4NDQ5.DLKXWw.aIuD3iB9K2Oz5YrLmo8z82nKfJI</token>
+    <owner-id>187676588182077451</owner-id>
+    <database-url>jdbc:h2:./resources/settings</database-url>
+    <database-driver>org.h2.Driver</database-driver>
+</bot>
