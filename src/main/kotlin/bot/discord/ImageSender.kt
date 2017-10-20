@@ -159,6 +159,6 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 			}
 		}
 
-		channel.sendMessage(builder.build()).queue()
+		if (!builder.isEmpty) channel.sendMessage(builder.build()).queue()
 	}
 }
