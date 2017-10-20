@@ -1,5 +1,7 @@
 out/
-resources/
+resources/*
+!resources/config.xml
 gradle/
 .idea/
 .DS_Store
+.gitignore
