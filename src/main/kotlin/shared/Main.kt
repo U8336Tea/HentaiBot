@@ -11,6 +11,7 @@ import com.jagrosh.jdautilities.commandclient.CommandClientBuilder
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 import net.dv8tion.jda.core.OnlineStatus
+import java.io.PrintStream
 import java.util.*
 
 //https://discordapp.com/api/oauth2/authorize?client_id=364067025850728449&scope=bot&permissions=0x4c00
@@ -49,12 +50,29 @@ fun main(args: Array<String>) {
 	//30 minutes to milliseconds: https://www.google.com/search?q=30%20minutes%20to%20milliseconds
 	timer.scheduleAtFixedRate(object : TimerTask() {
 		override fun run() {
-			sender.sendImages(10)
+			try {
+				sender.sendImages(10)
+			} catch (e: Throwable) {
+				val channel = bot.getUserById(client.ownerId).openPrivateChannel().complete()
+				val channelStream = MessageChannelStream(channel)
+
+				e.printStackTrace()
+
+				channelStream.use {
+					e.printStackTrace(PrintStream(it))
+				}
+			}
 		}
-	}, 0, 1.8E6.toLong())
+	}, 1000, 1.8E6.toLong())
 
 	//2 hours
 	timer.scheduleAtFixedRate(object : TimerTask() {
-		override fun run() = GuildTable.clearUnusedTags()
+		override fun run() {
+			try {
+				GuildTable.clearUnusedTags()
+			} catch (e: Throwable) {
+				e.printStackTrace()
+			}
+		}
 	}, 0, 7.2E6.toLong())
 }
