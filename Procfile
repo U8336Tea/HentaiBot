@@ -1,1 +1,1 @@
-console: java -cp out/artifacts/main_jar/main.jar
+console: java -cp out/artifacts/main_jar/main.jar shared.MainKt
