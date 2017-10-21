@@ -158,7 +158,7 @@ object GuildTable {
 		transaction {
 			Guild.update({
 				Guild.guildId eq server.id
-			}, 1, {
+			}, null, {
 				it[imageNumber] = number
 			})
 		}
