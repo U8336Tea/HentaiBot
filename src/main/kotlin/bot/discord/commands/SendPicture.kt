@@ -4,6 +4,7 @@ import bot.discord.ImageSender
 import bot.discord.exceptions.*
 import com.jagrosh.jdautilities.commandclient.Command
 import com.jagrosh.jdautilities.commandclient.CommandEvent
+import kotlinx.coroutines.experimental.async
 import net.dv8tion.jda.core.Permission
 
 object SendPicture : Command() {
@@ -30,7 +31,9 @@ object SendPicture : Command() {
 			}
 
 			try {
-				sender.sendImage(event.guild, images = num)
+				async {
+					sender.sendImage(event.guild, images = num)
+				}
 			} catch (e: NoTagException) {
 				event.replyError("You need a tag!")
 			} catch (e: NoPictureException) {
@@ -40,7 +43,9 @@ object SendPicture : Command() {
 			}
 		} else {
 			try {
-				sender.sendImage(event.guild)
+				async {
+					sender.sendImage(event.guild)
+				}
 			} catch (e: NoTagException) {
 				event.replyError("You need a tag!")
 			} catch (e: NoPictureException) {
