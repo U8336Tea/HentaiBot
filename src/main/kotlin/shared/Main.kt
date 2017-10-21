@@ -9,6 +9,7 @@ import images.danbooru.DanbooruAPI
 import images.gelbooru.GelbooruAPI
 import com.jagrosh.jdautilities.commandclient.CommandClientBuilder
 import net.dv8tion.jda.core.AccountType
+import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.JDABuilder
 import net.dv8tion.jda.core.OnlineStatus
 import java.io.PrintStream
@@ -44,6 +45,7 @@ fun main(args: Array<String>) {
 			.addEventListener(client, Listener)
 			.buildAsync()
 
+	val errorChannel = bot.getUserById(settings.ownerId).openPrivateChannel().complete()
 	val sender = ImageSender(bot, apis)
 	val timer = Timer()
 
@@ -53,14 +55,8 @@ fun main(args: Array<String>) {
 			try {
 				sender.sendImages(10)
 			} catch (e: Throwable) {
-				val channel = bot.getUserById(client.ownerId).openPrivateChannel().complete()
-				val channelStream = MessageChannelStream(channel)
-
 				e.printStackTrace()
-
-				channelStream.use {
-					e.printStackTrace(PrintStream(it))
-				}
+				e.sendToChannel(errorChannel)
 			}
 		}
 	}, 1000, 1.8E6.toLong())
