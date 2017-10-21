@@ -3,6 +3,5 @@ out/*
 !out/artifacts/main_jar/main.jar
 resources/*
 !resources/config.xml
-gradle/
 .idea/
 .DS_Store
