@@ -48,7 +48,10 @@ fun main(args: Array<String>) {
 	val sender = ImageSender(bot, apis)
 
 	//Do nothing until the bot is ready
-	while (bot.status != JDA.Status.CONNECTED) {  }
+	while (bot.status != JDA.Status.CONNECTED) {
+		//Prevent the compiler from optimizing out this loop
+		print("")
+	}
 
 	val errorChannel = bot.getUserById(settings.ownerId).openPrivateChannel().complete()
 	val timer = Timer()
