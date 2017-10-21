@@ -1,7 +1,6 @@
 out/*
 !out/artifacts
 !out/artifacts/main_jar/main.jar
-resources/*
-!resources/config.xml
+resources/
 .idea/
 .DS_Store
