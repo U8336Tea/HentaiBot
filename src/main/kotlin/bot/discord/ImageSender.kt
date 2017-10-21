@@ -40,7 +40,7 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 	 * @see sendImage
 	 */
 	fun sendImages(maxDepth: Int = 0) {
-		for (guild in this.bot.guilds)  {
+ 		for (guild in this.bot.guilds)  {
 			try {
 				this.sendImage(guild, maxDepth, images = guild.imageNumber)
 			} catch (e: NoTagException) {
@@ -159,6 +159,6 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 			}
 		}
 
-		channel.sendMessage(builder.build()).queue()
+		if (!builder.isEmpty) channel.sendMessage(builder.build()).queue()
 	}
 }

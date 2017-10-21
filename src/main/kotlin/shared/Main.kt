@@ -9,8 +9,10 @@ import images.danbooru.DanbooruAPI
 import images.gelbooru.GelbooruAPI
 import com.jagrosh.jdautilities.commandclient.CommandClientBuilder
 import net.dv8tion.jda.core.AccountType
+import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.JDABuilder
 import net.dv8tion.jda.core.OnlineStatus
+import java.io.PrintStream
 import java.util.*
 
 //https://discordapp.com/api/oauth2/authorize?client_id=364067025850728449&scope=bot&permissions=0x4c00
@@ -44,17 +46,36 @@ fun main(args: Array<String>) {
 			.buildAsync()
 
 	val sender = ImageSender(bot, apis)
+
+	//Do nothing until the bot is ready
+	while (bot.status != JDA.Status.CONNECTED) {
+		//Prevent the compiler from optimizing out this loop
+		print("")
+	}
+
+	val errorChannel = bot.getUserById(settings.ownerId).openPrivateChannel().complete()
 	val timer = Timer()
 
 	//30 minutes to milliseconds: https://www.google.com/search?q=30%20minutes%20to%20milliseconds
 	timer.scheduleAtFixedRate(object : TimerTask() {
 		override fun run() {
-			sender.sendImages(10)
+			try {
+				sender.sendImages(10)
+			} catch (e: Throwable) {
+				e.printStackTrace()
+				e.sendToChannel(errorChannel)
+			}
 		}
-	}, 0, 1.8E6.toLong())
+	}, 1000, 1.8E6.toLong())
 
 	//2 hours
 	timer.scheduleAtFixedRate(object : TimerTask() {
-		override fun run() = GuildTable.clearUnusedTags()
+		override fun run() {
+			try {
+				GuildTable.clearUnusedTags()
+			} catch (e: Throwable) {
+				e.printStackTrace()
+			}
+		}
 	}, 0, 7.2E6.toLong())
 }
