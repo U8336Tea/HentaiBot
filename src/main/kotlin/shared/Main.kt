@@ -45,8 +45,12 @@ fun main(args: Array<String>) {
 			.addEventListener(client, Listener)
 			.buildAsync()
 
-	val errorChannel = bot.getUserById(settings.ownerId).openPrivateChannel().complete()
 	val sender = ImageSender(bot, apis)
+
+	//Do nothing until the bot is ready
+	while (bot.status != JDA.Status.CONNECTED) {  }
+
+	val errorChannel = bot.getUserById(settings.ownerId).openPrivateChannel().complete()
 	val timer = Timer()
 
 	//30 minutes to milliseconds: https://www.google.com/search?q=30%20minutes%20to%20milliseconds
