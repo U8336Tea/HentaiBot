@@ -3,6 +3,7 @@ package bot.discord.database
 import bot.discord.config.Configuration
 import bot.discord.database.tables.*
 import bot.discord.database.tables.GuildToSentImages.guild
+import bot.discord.database.tables.SentImages.url
 import bot.discord.database.tables.Tags.tag
 import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
 import org.jetbrains.exposed.sql.*
@@ -57,7 +58,7 @@ object GuildTable {
 		add(server.id, GuildToTag, tags)
 	}
 
-	fun addSentTag(server: DiscordGuild, url: String) {
+	fun addSentImages(server: DiscordGuild, urls: List<String>) {
 		transaction {
 			//Gets the ID in the table or inserts it.
 			val guildId = Guild.select {
@@ -68,19 +69,21 @@ object GuildTable {
 
 			val query = SentImages.select { SentImages.url eq url }
 
-			if (query.empty()) {
-				val imageId = SentImages.insert {
-					it[tag] = url
-				} get SentImages.id
+			for (url in urls) {
+				if (query.empty()) {
+					val imageId = SentImages.insert {
+						it[tag] = url
+					} get SentImages.id
 
-				GuildToSentImages.insert {
-					it[guild] = guildId
-					it[image] = imageId
-				}
-			} else {
-				GuildToSentImages.insert {
-					it[guild] = guildId
-					it[image] = query.iterator().next()[SentImages.id]
+					GuildToSentImages.insert {
+						it[guild] = guildId
+						it[image] = imageId
+					}
+				} else {
+					GuildToSentImages.insert {
+						it[guild] = guildId
+						it[image] = query.iterator().next()[SentImages.id]
+					}
 				}
 			}
 		}
@@ -223,7 +226,7 @@ object GuildTable {
 		}
 	}
 
-	fun getSentTags(server: DiscordGuild): List<String> {
+	fun getSentImages(server: DiscordGuild): List<String> {
 		return transaction {
 			((GuildToSentImages innerJoin Guild) innerJoin SentImages).select {
 				Guild.guildId eq server.id
