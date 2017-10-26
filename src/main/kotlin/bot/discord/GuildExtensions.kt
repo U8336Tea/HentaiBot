@@ -32,16 +32,6 @@ var Guild.sentNSFWMessage: Boolean
 		sentWarningMap[this] = value
 	}
 
-var Guild.tagsSent: MutableList<String>
-	get() {
-		if (tagGoneMap[this] == null) tagGoneMap[this] = mutableListOf()
-
-		return tagGoneMap[this]!!
-	}
-	set(value) {
-		tagGoneMap[this] = value
-	}
-
 var Guild.imageNumber: Int
 	get() = GuildTable.getImageNumber(this) ?: 10
 	set(value) = GuildTable.changeImageNumber(this, value)

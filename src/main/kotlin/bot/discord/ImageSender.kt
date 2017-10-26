@@ -1,6 +1,7 @@
 package bot.discord
 
 import bot.discord.exceptions.*
+import bot.discord.database.GuildTable
 import images.general.API
 import images.general.Image
 import net.dv8tion.jda.core.JDA
@@ -76,12 +77,13 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 		val random = Random()
 		val api = this.apis[random.nextInt(this.apis.size)]
 		val imageTag = tags[random.nextInt(tags.size)]
+		val sentTags = GuildTable.getSentImages(guild)
 
 		val imageArray = api.request(arrayListOf(imageTag, api.getSortTag("score")))
 				?.images?.filter {
 			//https://stackoverflow.com/a/20244275
 			disjoint(it.tags, guild.blacklistedTags)
-					&& !guild.tagsSent.contains(getUrl(it))
+					&& !sentTags.contains(getUrl(it))
 		}
 
 		//Ensure we don't try to send a nonexistent image
@@ -100,6 +102,7 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 		channel.sendTyping().queue()
 
 		var builder = MessageBuilder().append("Pictures for tag $imageTag:\n")
+		val imagesAdded = arrayListOf<String>()
 
 		if (imageArray.size <= images) {
 			var imagesSent = 0
@@ -107,7 +110,7 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 			for (image in imageArray) {
 				val url = this.getUrl(image) ?: continue
 
-				if (guild.tagsSent.contains(url)) continue
+				if (sentTags.contains(url)) continue
 
 				imagesSent++
 
@@ -119,7 +122,7 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 				}
 
 				builder.appendln(url)
-				guild.tagsSent.add(url)
+				imagesAdded.add(url)
 			}
 		} else {
 			// We need 1..times so that i % 5 == 0 at 5 pictures.
@@ -134,30 +137,23 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 				var image = imageArray[random.nextInt(imageArray.size)]
 				var url = this.getUrl(image)
 
-				//Ensure we don't try to send a nonexistent image
-				if (url == null) {
-					image = imageArray[random.nextInt(imageArray.size)]
-					url = this.getUrl(image)
-
-					if (url == null) continue
-				}
-
-				//Try 20 times to get a new picture
+				//Try 20 times to get a picture
 				@Suppress("NAME_SHADOWING")
 				for (i in 0 until 20) {
 					image = imageArray[random.nextInt(imageArray.size)]
 					url = this.getUrl(image)
 
-					if (!guild.tagsSent.contains(url)) break
+					if (!sentTags.contains(url) && url != null) break
 				}
 
-				//Don't resend a picture, even if we can't find another.
-				if (guild.tagsSent.contains(url)) continue
+				if (url == null) continue
 
 				builder.appendln(url)
-				guild.tagsSent.add(url!!)
+				imagesAdded.add(url)
 			}
 		}
+
+		GuildTable.addSentImages(guild, imagesAdded)
 
 		if (!builder.isEmpty) channel.sendMessage(builder.build()).queue()
 	}
