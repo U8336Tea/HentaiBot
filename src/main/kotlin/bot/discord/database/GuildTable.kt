@@ -24,7 +24,7 @@ object GuildTable {
 		Database.connect(url, settings.databaseDriver)
 
 		transaction {
-			create(Guild, Tags, GuildToTag, GuildTagBlacklist)
+			create(Guild, Tags, GuildToTag, GuildTagBlacklist, SentImages, GuildToSentImages)
 		}
 	}
 
