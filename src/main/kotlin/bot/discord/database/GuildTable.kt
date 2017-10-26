@@ -2,9 +2,7 @@ package bot.discord.database
 
 import bot.discord.config.Configuration
 import bot.discord.database.tables.*
-import bot.discord.database.tables.GuildToSentImages.guild
 import bot.discord.database.tables.Tags.tag
-import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
 import org.jetbrains.exposed.sql.*
 import net.dv8tion.jda.core.entities.Guild as DiscordGuild
 import net.dv8tion.jda.core.entities.TextChannel as DiscordTextChannel
@@ -15,15 +13,7 @@ object GuildTable {
 	init {
 		val settings = Configuration.settings
 
-		val url = if (settings.databaseUrl.startsWith("$")) {
-			val url = settings.databaseUrl
-			//Drop $ character
-			System.getenv(url.drop(1))
-		} else {
-			settings.databaseUrl
-		}
-
-		Database.connect(url, settings.databaseDriver)
+		Database.connect(settings.databaseUrl, settings.databaseDriver)
 
 		transaction {
 			create(Guild, Tags, GuildToTag, GuildTagBlacklist)
@@ -65,7 +55,7 @@ object GuildTable {
 		add(server.id, GuildToTag, tags)
 	}
 
-	fun addSentTag(server: DiscordGuild, url: String) {
+	fun addSentImages(server: DiscordGuild, urls: List<String>) {
 		transaction {
 			//Gets the ID in the table or inserts it.
 			val guildId = Guild.select {
@@ -74,21 +64,23 @@ object GuildTable {
 				it[guildId] = server.id
 			} get Guild.id
 
-			val query = SentImages.select { SentImages.url eq url }
+			for (url in urls) {
+				val query = SentImages.select { SentImages.url eq url }
 
-			if (query.empty()) {
-				val imageId = SentImages.insert {
-					it[tag] = url
-				} get SentImages.id
+				if (query.empty()) {
+					val imageId = SentImages.insert {
+						it[tag] = url
+					} get SentImages.id
 
-				GuildToSentImages.insert {
-					it[guild] = guildId
-					it[image] = imageId
-				}
-			} else {
-				GuildToSentImages.insert {
-					it[guild] = guildId
-					it[image] = query.iterator().next()[SentImages.id]
+					GuildToSentImages.insert {
+						it[guild] = guildId
+						it[image] = imageId
+					}
+				} else {
+					GuildToSentImages.insert {
+						it[guild] = guildId
+						it[image] = query.iterator().next()[SentImages.id]
+					}
 				}
 			}
 		}
@@ -176,6 +168,18 @@ object GuildTable {
 		}
 	}
 
+	fun removeSentImages(server: DiscordGuild) {
+		transaction {
+			val guildId = Guild.select {
+				Guild.guildId eq server.id
+			}.map { it[Guild.id] }
+
+			GuildToSentImages.deleteWhere {
+				GuildToSentImages.guild eq guildId
+			}
+		}
+	}
+
 	fun changeChannel(server: DiscordGuild, textChannel: DiscordTextChannel) {
 		transaction {
 			Guild.update({
@@ -231,7 +235,7 @@ object GuildTable {
 		}
 	}
 
-	fun getSentTags(server: DiscordGuild): List<String> {
+	fun getSentImages(server: DiscordGuild): List<String> {
 		return transaction {
 			((GuildToSentImages innerJoin Guild) innerJoin SentImages).select {
 				Guild.guildId eq server.id

@@ -12,7 +12,6 @@ import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.JDABuilder
 import net.dv8tion.jda.core.OnlineStatus
-import java.io.PrintStream
 import java.util.*
 
 //https://discordapp.com/api/oauth2/authorize?client_id=364067025850728449&scope=bot&permissions=0x4c00
@@ -24,7 +23,7 @@ fun main(args: Array<String>) {
 	GuildTable.clearUnusedTags()
 
 	val clientBuilder = CommandClientBuilder()
-			.addCommands(AddTags, ListTags, RemoveTags, ResetTags)
+			.addCommands(AddTags, ListTags, RemoveTags, ResetTags, ResetSentImages)
 			.addCommands(BlacklistTags, ListBlacklistedTags, UnblacklistTags, ResetBlacklist)
 			.addCommands(GetPictureNumber, SetPictureNumber)
 			.addCommands(SendPicture)
