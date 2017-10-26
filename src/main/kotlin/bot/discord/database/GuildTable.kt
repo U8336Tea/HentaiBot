@@ -13,7 +13,15 @@ object GuildTable {
 	init {
 		val settings = Configuration.settings
 
-		Database.connect(settings.databaseUrl, settings.databaseDriver)
+		val url = if (settings.databaseUrl.startsWith("$")) {
+			val url = settings.databaseUrl
+			//Drop $ character
+			System.getenv(url.drop(1))
+		} else {
+			settings.databaseUrl
+		}
+
+		Database.connect(url, settings.databaseDriver)
 
 		transaction {
 			create(Guild, Tags, GuildToTag, GuildTagBlacklist)
