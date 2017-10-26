@@ -102,21 +102,21 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 		var builder = MessageBuilder().append("Pictures for tag $imageTag:\n")
 
 		if (imageArray.size <= images) {
-			// See below for why.
-			// I hope this is the best way.
-			for (i in 1..imageArray.size) {
-				val image = imageArray[i - 1]
+			var imagesSent = 0
 
-				// Send the message if it is close to the size limit
-				// Or if we have 5 pictures already. This is because that is what Discord will show.
-				if (builder.length() >= 1800 || i % 5 == 0) {
-					channel.sendMessage(builder.build()).queue()
-					builder = MessageBuilder()
-				}
-
+			for (image in imageArray) {
 				val url = this.getUrl(image) ?: continue
 
 				if (guild.tagsSent.contains(url)) continue
+
+				imagesSent++
+
+				// Send the message if it is close to the size limit
+				// or if we have 5 pictures already. This is because that is what Discord will show.
+				if (builder.length() >= 1800 || imagesSent % 5 == 0) {
+					channel.sendMessage(builder.build()).queue()
+					builder = MessageBuilder()
+				}
 
 				builder.appendln(url)
 				guild.tagsSent.add(url)
