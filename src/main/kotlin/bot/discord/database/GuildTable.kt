@@ -77,7 +77,7 @@ object GuildTable {
 
 				if (query.empty()) {
 					val imageId = SentImages.insert {
-						it[tag] = url
+						it[SentImages.url] = url
 					} get SentImages.id
 
 					GuildToSentImages.insert {
