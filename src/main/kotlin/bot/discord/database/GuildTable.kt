@@ -2,10 +2,7 @@ package bot.discord.database
 
 import bot.discord.config.Configuration
 import bot.discord.database.tables.*
-import bot.discord.database.tables.GuildToSentImages.guild
-import bot.discord.database.tables.SentImages.url
 import bot.discord.database.tables.Tags.tag
-import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
 import org.jetbrains.exposed.sql.*
 import net.dv8tion.jda.core.entities.Guild as DiscordGuild
 import net.dv8tion.jda.core.entities.TextChannel as DiscordTextChannel
@@ -67,9 +64,9 @@ object GuildTable {
 				it[guildId] = server.id
 			} get Guild.id
 
-			val query = SentImages.select { SentImages.url eq url }
-
 			for (url in urls) {
+				val query = SentImages.select { SentImages.url eq url }
+
 				if (query.empty()) {
 					val imageId = SentImages.insert {
 						it[tag] = url
@@ -167,6 +164,18 @@ object GuildTable {
 
 			GuildTagBlacklist.deleteWhere {
 				GuildTagBlacklist.guild inList ids
+			}
+		}
+	}
+
+	fun removeSentImages(server: DiscordGuild) {
+		transaction {
+			val guildId = Guild.select {
+				Guild.guildId eq server.id
+			}.map { it[Guild.id] }
+
+			GuildToSentImages.deleteWhere {
+				GuildToSentImages.guild eq guildId
 			}
 		}
 	}
