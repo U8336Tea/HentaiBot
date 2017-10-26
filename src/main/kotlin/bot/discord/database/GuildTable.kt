@@ -2,6 +2,9 @@ package bot.discord.database
 
 import bot.discord.config.Configuration
 import bot.discord.database.tables.*
+import bot.discord.database.tables.GuildToSentImages.guild
+import bot.discord.database.tables.Tags.tag
+import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
 import org.jetbrains.exposed.sql.*
 import net.dv8tion.jda.core.entities.Guild as DiscordGuild
 import net.dv8tion.jda.core.entities.TextChannel as DiscordTextChannel
@@ -52,6 +55,35 @@ object GuildTable {
 
 	fun addTags(server: DiscordGuild, tags: List<String>) {
 		add(server.id, GuildToTag, tags)
+	}
+
+	fun addSentTag(server: DiscordGuild, url: String) {
+		transaction {
+			//Gets the ID in the table or inserts it.
+			val guildId = Guild.select {
+				Guild.guildId eq server.id
+			}.map { it[Guild.id] }.elementAtOrNull(0) ?: Guild.insert {
+				it[guildId] = server.id
+			} get Guild.id
+
+			val query = SentImages.select { SentImages.url eq url }
+
+			if (query.empty()) {
+				val imageId = SentImages.insert {
+					it[tag] = url
+				} get SentImages.id
+
+				GuildToSentImages.insert {
+					it[guild] = guildId
+					it[image] = imageId
+				}
+			} else {
+				GuildToSentImages.insert {
+					it[guild] = guildId
+					it[image] = query.iterator().next()[SentImages.id]
+				}
+			}
+		}
 	}
 
 	fun blacklistTags(server: DiscordGuild, tags: List<String>) {
@@ -188,6 +220,14 @@ object GuildTable {
 			((GuildTagBlacklist innerJoin Guild) innerJoin Tags).select {
 				Guild.guildId eq server.id
 			}.map { it[Tags.tag] }
+		}
+	}
+
+	fun getSentTags(server: DiscordGuild): List<String> {
+		return transaction {
+			((GuildToSentImages innerJoin Guild) innerJoin SentImages).select {
+				Guild.guildId eq server.id
+			}.map { it[SentImages.url] }
 		}
 	}
 
