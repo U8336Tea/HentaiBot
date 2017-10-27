@@ -8,6 +8,7 @@ object QuitBot : Command() {
 		this.name = "QuitBot"
 		this.ownerCommand = true
 		this.help = "Quits the bot."
+		this.guildOnly = false
 	}
 
 	override fun execute(event: CommandEvent) {
