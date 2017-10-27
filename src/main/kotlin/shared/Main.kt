@@ -63,6 +63,8 @@ fun main(args: Array<String>) {
 			} catch (e: Throwable) {
 				e.printStackTrace()
 				e.sendToChannel(errorChannel)
+
+				this.run()
 			}
 		}
 	}, 1000, 1.8E6.toLong())
@@ -74,6 +76,8 @@ fun main(args: Array<String>) {
 				GuildTable.clearUnusedTags()
 			} catch (e: Throwable) {
 				e.printStackTrace()
+
+				this.run()
 			}
 		}
 	}, 0, 7.2E6.toLong())
