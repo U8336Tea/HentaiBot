@@ -110,7 +110,7 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 			for (image in imageArray) {
 				val url = this.getUrl(image) ?: continue
 
-				if (sentTags.contains(url)) continue
+				if (imagesAdded.contains(url)) continue
 
 				imagesSent++
 
@@ -143,7 +143,7 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 					image = imageArray[random.nextInt(imageArray.size)]
 					url = this.getUrl(image)
 
-					if (!sentTags.contains(url) && url != null) break
+					if (!imagesAdded.contains(url) && url != null) break
 				}
 
 				if (url == null) continue
