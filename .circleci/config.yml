@@ -2,6 +2,7 @@ version: 2.1
 
 jobs:
     build:
+        shell: /bin/bash
         machine: true
         steps:
              - checkout
