@@ -2,9 +2,8 @@ version: 2.1
 
 jobs:
     build:
+        shell: /bin/bash
         machine: true
         steps:
              - checkout
-             - run:
-                 - name: Gradle build
-                 - command: export TERM=${TERM:-dumb} && gradle build
+             - run: export TERM=${TERM:-dumb} && gradle build
