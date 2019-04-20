@@ -38,17 +38,13 @@ public class DanbooruPost implements Image {
     @Nullable
     @Override
     public String getUrl() {
-        if (url == null || url.equals("null")) return null;
-
         return url;
     }
 
     @Nullable
     @Override
     public String getBigUrl() {
-        if (largeUrl == null || largeUrl.equals("null")) return null;
-
-        return "https://danbooru.donmai.us" + largeUrl;
+        return largeUrl;
     }
 
     @NotNull
