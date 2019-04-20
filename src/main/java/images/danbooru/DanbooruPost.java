@@ -40,7 +40,7 @@ public class DanbooruPost implements Image {
     public String getUrl() {
         if (url == null || url.equals("null")) return null;
 
-        return url;
+        return "https://danbooru.donmai.us" + url;
     }
 
     @Nullable
