@@ -8,5 +8,5 @@ jobs:
              - run:
                  - name: Gradle build
                  - command: |
-                      export TERM=${TERM:-dumb}
+                      export TERM=hi
                       gradle build 
