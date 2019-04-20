@@ -6,4 +6,4 @@ jobs:
         machine: true
         steps:
              - checkout
-             - run: export TERM=${TERM:-dumb} && ./gradle build
+             - run: export TERM=${TERM:-dumb} && ./gradlew build
