@@ -11,6 +11,7 @@ object AddTags : Command() {
 		this.name = "AddTags"
 		this.arguments = "<tags>"
 		this.help = "Adds a tag to the list."
+		this.aliases = arrayOf("adt")
 		this.botPermissions = arrayOf(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE)
 	}
 

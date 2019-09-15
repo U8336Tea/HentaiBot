@@ -11,6 +11,7 @@ object SendPicture : Command() {
 	init {
 		this.name = "SendPicture"
 		this.help = "Sends a picture with your tags."
+		this.aliases = arrayOf("pic")
 		this.botPermissions = arrayOf(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS)
 	}
 

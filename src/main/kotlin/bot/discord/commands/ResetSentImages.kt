@@ -8,6 +8,7 @@ object ResetSentImages : Command() {
 	init {
 		this.name = "ResetSentImages"
 		this.help = "Resets the list of sent images."
+		this.aliases = arrayOf("rsi")
 	}
 
 	override fun execute(event: CommandEvent) {

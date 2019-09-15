@@ -12,6 +12,7 @@ object RemoveTags : Command() {
 		this.name = "RemoveTags"
 		this.arguments = "<tags>"
 		this.help = "Removes a tag from the list."
+		this.aliases = arrayOf("rmt")
 	}
 
 	override fun execute(event: CommandEvent) {

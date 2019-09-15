@@ -9,6 +9,7 @@ object ListTags : Command() {
 	init {
 		this.name = "ListTags"
 		this.help = "Lists all tags for your guild."
+		this.aliases = arrayOf("lst", "lstag")
 		this.botPermissions = arrayOf(Permission.MESSAGE_WRITE)
 	}
 
