@@ -33,7 +33,10 @@ class ImageSender(private val bot: JDA, private val apis: List<API>) {
 	}
 
 	private fun incrementAPI(increment: Int = 1) {
-		apiIndex += increment
+		// Negative increments result in OutOfBoundsException
+		var i = increment
+		if (i < 0) i = -i
+		apiIndex += i
 		apiIndex %= apis.size
 	}
 
