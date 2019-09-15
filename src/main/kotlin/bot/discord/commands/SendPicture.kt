@@ -16,6 +16,7 @@ object SendPicture : Command() {
 	}
 
 	override fun execute(event: CommandEvent) {
+		event.reply("test")
 		val sender = ImageSender.default
 
 		if (sender == null) {
@@ -32,6 +33,7 @@ object SendPicture : Command() {
 			}
 
 			try {
+				event.reply("send")
 				sender.sendImage(event.guild, images = num)
 			} catch (e: NoTagException) {
 				event.replyError("You need a tag!")
@@ -42,6 +44,7 @@ object SendPicture : Command() {
 			}
 		} else {
 			try {
+				event.reply("send2")
 				sender.sendImage(event.guild)
 			} catch (e: NoTagException) {
 				event.replyError("You need a tag!")
