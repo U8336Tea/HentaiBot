@@ -16,6 +16,7 @@ object SendPicture : Command() {
 	}
 
 	override fun execute(event: CommandEvent) {
+		// This line has to be here for replyError to work. Don't ask why
 		event.reply("")
 		val sender = ImageSender.default
 
@@ -33,7 +34,7 @@ object SendPicture : Command() {
 			}
 
 			try {
-				sender.sendImage(event.guild, images = num)
+				sender.sendImage(event.guild, 2, images = num)
 			} catch (e: NoTagException) {
 				event.replyError("You need a tag!")
 			} catch (e: NoPictureException) {
@@ -43,7 +44,7 @@ object SendPicture : Command() {
 			}
 		} else {
 			try {
-				sender.sendImage(event.guild)
+				sender.sendImage(event.guild, 2)
 			} catch (e: NoTagException) {
 				event.replyError("You need a tag!")
 			} catch (e: NoPictureException) {
