@@ -32,9 +32,7 @@ object SendPicture : Command() {
 			}
 
 			try {
-				async {
-					sender.sendImage(event.guild, images = num)
-				}
+				sender.sendImage(event.guild, images = num)
 			} catch (e: NoTagException) {
 				event.replyError("You need a tag!")
 			} catch (e: NoPictureException) {
@@ -44,9 +42,7 @@ object SendPicture : Command() {
 			}
 		} else {
 			try {
-				async {
-					sender.sendImage(event.guild)
-				}
+				sender.sendImage(event.guild)
 			} catch (e: NoTagException) {
 				event.replyError("You need a tag!")
 			} catch (e: NoPictureException) {
