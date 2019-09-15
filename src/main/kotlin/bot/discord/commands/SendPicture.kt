@@ -16,6 +16,7 @@ object SendPicture : Command() {
 	}
 
 	override fun execute(event: CommandEvent) {
+		event.reply("")
 		val sender = ImageSender.default
 
 		if (sender == null) {
