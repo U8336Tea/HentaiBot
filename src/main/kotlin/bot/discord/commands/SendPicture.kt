@@ -33,24 +33,28 @@ object SendPicture : Command() {
 				return
 			}
 
-			try {
-				sender.sendImage(event.guild, 2, images = num)
-			} catch (e: NoTagException) {
-				event.replyError("You need a tag!")
-			} catch (e: NoPictureException) {
-				event.replyError("No pictures for tag ${e.tag}!")
-			} catch (e: MissingChannelException) {
-				event.replyError("You must have an NSFW channel!")
+			async {
+				try {
+					sender.sendImage(event.guild, 2, images = num)
+				} catch (e: NoTagException) {
+					event.replyError("You need a tag!")
+				} catch (e: NoPictureException) {
+					event.replyError("No pictures for tag ${e.tag}!")
+				} catch (e: MissingChannelException) {
+					event.replyError("You must have an NSFW channel!")
+				}
 			}
 		} else {
-			try {
-				sender.sendImage(event.guild, 2)
-			} catch (e: NoTagException) {
-				event.replyError("You need a tag!")
-			} catch (e: NoPictureException) {
-				event.replyError("No pictures for tag ${e.tag}!")
-			} catch (e: MissingChannelException) {
-				event.replyError("You must have an NSFW channel!")
+			async {
+				try {
+					sender.sendImage(event.guild, 2)
+				} catch (e: NoTagException) {
+					event.replyError("You need a tag!")
+				} catch (e: NoPictureException) {
+					event.replyError("No pictures for tag ${e.tag}!")
+				} catch (e: MissingChannelException) {
+					event.replyError("You must have an NSFW channel!")
+				}
 			}
 		}
 	}
