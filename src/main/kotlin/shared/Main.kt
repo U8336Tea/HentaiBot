@@ -8,6 +8,7 @@ import bot.discord.database.GuildTable
 import images.danbooru.DanbooruAPI
 import images.gelbooru.GelbooruAPI
 import com.jagrosh.jdautilities.commandclient.CommandClientBuilder
+import images.realbooru.RealbooruAPI
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.JDABuilder
@@ -18,7 +19,7 @@ import java.util.*
 fun main(args: Array<String>) {
 	val settings = Configuration.settings
 
-	val apis = arrayListOf(DanbooruAPI, GelbooruAPI)
+	val apis = arrayListOf(DanbooruAPI, GelbooruAPI, RealbooruAPI)
 
 	GuildTable.clearUnusedTags()
 
