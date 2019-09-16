@@ -28,35 +28,41 @@ public class Settings {
     private String databaseDriver;
     //endregion
 
+    @NotNull
+    private String access(@NotNull String var) {
+        if (var.startsWith("$")) return System.getenv(var.substring(1));
+        return var;
+    }
+
     //region Accessors
     @NotNull
     public String getToken() {
-        return token;
+        return access(token);
     }
 
     @NotNull
     public String getOwnerId() {
-        return ownerId;
+        return access(ownerId);
     }
 
     @NotNull
     public String getPrefix() {
-        return prefix;
+        return access(prefix);
     }
 
     @Nullable
     public String getAltPrefix() {
-        return altPrefix;
+        return access(altPrefix);
     }
 
     @NotNull
     public String getDatabaseUrl() {
-        return databaseUrl;
+        return access(databaseUrl);
     }
 
     @NotNull
     public String getDatabaseDriver() {
-        return databaseDriver;
+        return access(databaseDriver);
     }
     //endregion
 }
