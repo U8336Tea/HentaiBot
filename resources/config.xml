@@ -1,5 +1,5 @@
 <bot prefix="!!" alt-prefix="..">
-    <token>MzY0MDY3MDI1ODUwNzI4NDQ5.DLKXWw.aIuD3iB9K2Oz5YrLmo8z82nKfJI</token>
+    <token>$BOT_TOKEN</token>
     <owner-id>187676588182077451</owner-id>
     <database-url>$JDBC_DATABASE_URL</database-url>
     <database-driver>$JDBC_DATABASE_DRIVER</database-driver>
